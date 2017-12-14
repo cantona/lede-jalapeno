@@ -294,4 +294,18 @@ define Device/AP-DK04.1-C1
 endef
 TARGET_DEVICES += AP-DK04.1-C1
 
+define Device/Jalapeno
+	$(call Device/FitImage)
+	$(call Device/UbiFit)
+	DEVICE_DTS := qcom-ipq4019-ap.jalapeno-v2
+	KERNEL_LOADADDR := 0x80208000
+	KERNEL_INSTALL := 1
+	KERNEL_SIZE := 4048k
+	BLOCKSIZE := 128k
+	PAGESIZE := 2048
+	BOARD_NAME := jalapeno
+	DEVICE_TITLE := 8devices Jalapeno
+endef
+TARGET_DEVICES += Jalapeno
+
 $(eval $(call BuildImage))
