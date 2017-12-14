@@ -92,6 +92,13 @@ define Download/ath10k-firmware-qca9888-ct
 endef
 $(eval $(call Download,ath10k-firmware-qca9888-ct))
 
+QCA4019_FIRMWARE_FILE_CT:=firmware-5-ct-full-community-10.bin-lede.001
+define Download/ath10k-firmware-qca4019-ct
+  $(call Download/ct-firmware,QCA4019,ath10k-4019-10-4)
+  HASH:=1a1881eb204d295684773b483046dfd3f33d3fc02500ea203ad6676d670837c4
+endef
+$(eval $(call Download,ath10k-firmware-qca4019-ct))
+
 define Package/ath10k-firmware-qca99x0
 $(Package/ath10k-firmware-default)
   TITLE:=ath10k firmware for QCA99x0 devices
@@ -146,6 +153,14 @@ This firmware conflicts with the standard 9984 firmware, so select only
 one.
 endef
 
+define Package/ath10k-firmware-qca4019-ct/description
+Alternative ath10k firmware for IPQ4019 radio from Candela Technologies.
+Enables IBSS and other features.  See:
+http://www.candelatech.com/ath10k-10.4.php
+This firmware conflicts with the standard IPQ4019 firmware, so select only
+one.
+endef
+
 define Package/ath10k-firmware-qca9888-ct/description
 Alternative ath10k firmware for QCA9886 and QCA9888 from Candela Technologies.
 Enables IBSS and other features.  See:
@@ -170,6 +185,13 @@ endef
 define Package/ath10k-firmware-qca9984-ct
 $(Package/ath10k-firmware-default)
   TITLE:=ath10k CT 10.4.3 firmware for QCA9984 devices
+  SECTION:=firmware
+  CATEGORY:=Firmware
+endef
+
+define Package/ath10k-firmware-qca4019-ct
+$(Package/ath10k-firmware-default)
+  TITLE:=ath10k CT 10.4.3 firmware for QCA4019 devices
   SECTION:=firmware
   CATEGORY:=Firmware
 endef
@@ -318,6 +340,16 @@ define Package/ath10k-firmware-qca9984/install
 		$(1)/lib/firmware/ath10k/QCA9984/hw1.0/firmware-5.bin
 endef
 
+define Package/ath10k-firmware-qca4019-ct/install
+	$(INSTALL_DIR) $(1)/lib/firmware/ath10k/QCA4019/hw1.0
+	$(INSTALL_DATA) \
+		$(PKG_BUILD_DIR)/QCA4019/hw1.0/board-2.bin \
+		$(1)/lib/firmware/ath10k/QCA4019/hw1.0/
+	$(INSTALL_DATA) \
+		$(DL_DIR)/$(call CT_FIRMWARE_FILE,QCA4019) \
+		$(1)/lib/firmware/ath10k/QCA4019/hw1.0/firmware-5.bin
+endef
+
 define Package/ath10k-firmware-qca9984-ct/install
 	$(INSTALL_DIR) $(1)/lib/firmware/ath10k/QCA9984/hw1.0
 	$(INSTALL_DATA) \
@@ -353,4 +385,5 @@ $(eval $(call BuildPackage,ath10k-firmware-qca9887-ct))
 $(eval $(call BuildPackage,ath10k-firmware-qca988x-ct))
 $(eval $(call BuildPackage,ath10k-firmware-qca99x0-ct))
 $(eval $(call BuildPackage,ath10k-firmware-qca9984-ct))
+$(eval $(call BuildPackage,ath10k-firmware-qca4019-ct))
 $(eval $(call BuildPackage,ath10k-firmware-qca9888-ct))
